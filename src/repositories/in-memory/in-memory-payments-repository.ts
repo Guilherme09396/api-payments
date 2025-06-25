@@ -5,6 +5,10 @@ import { PaymentRepository } from '../Payment-repository';
 export class InMemoryPaymentsRepository implements PaymentRepository {
   private data: Payments[] = [];
 
+  async findAll(): Promise<Payments[]> {
+    return this.data;
+  }
+
   async create({ method, status, charges_id }: Prisma.PaymentsUncheckedCreateInput)
   : Promise<Payments> {
     this.data.push({
