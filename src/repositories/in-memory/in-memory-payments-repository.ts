@@ -5,6 +5,15 @@ import { PaymentRepository } from '../Payment-repository';
 export class InMemoryPaymentsRepository implements PaymentRepository {
   private data: Payments[] = [];
 
+  async findByChargeId(chargeId: string): Promise<Payments | null> {
+    const payment = this.data.find((item) => item.charges_id === chargeId);
+    if (!payment) {
+      return null;
+    }
+
+    return payment;
+  }
+
   async findAll(): Promise<Payments[]> {
     return this.data;
   }

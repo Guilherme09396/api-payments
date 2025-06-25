@@ -2,6 +2,7 @@ import { Payments } from 'generated/prisma';
 import { PaymentRepository } from '@/repositories/Payment-repository';
 import { ChargeRepository } from '@/repositories/Charge-repository';
 import { ResourceNotFoundError } from '../errors/resource-not-found-error';
+import { AlreadyExistsPaymentError } from '../errors/already-exists-payment-error';
 
 interface CreatePaymentRequest {
     method: string
@@ -25,6 +26,12 @@ export class CreatePaymentsService {
 
     if (!charge) {
       throw new ResourceNotFoundError();
+    }
+
+    const paymentHasExist = await this.paymentRepository.findByChargeId(chargesId);
+
+    if (paymentHasExist) {
+      throw new AlreadyExistsPaymentError();
     }
 
     const payment = await this.paymentRepository.create({
