@@ -5,6 +5,16 @@ import { ChargeRepository } from '../Charge-repository';
 export class InMemoryChargesRepository implements ChargeRepository {
   private data: Charges[] = [];
 
+  async findById(id: string): Promise<Charges | null> {
+    const charge = this.data.find((item) => item.id === id);
+
+    if (!charge) {
+      return null;
+    }
+
+    return charge;
+  }
+
   async create({
     client, amount, description, status,
   }: Prisma.ChargesCreateInput): Promise<Charges> {
