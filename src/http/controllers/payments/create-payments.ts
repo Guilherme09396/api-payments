@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { makeCreatePaymentsService } from '@/services/factories/make-create-payment-service';
 import { ResourceNotFoundError } from '@/services/errors/resource-not-found-error';
+import { AlreadyExistsPaymentError } from '@/services/errors/already-exists-payment-error';
 
 export async function createPayments(req: FastifyRequest, res: FastifyReply) {
   try {
@@ -17,7 +18,7 @@ export async function createPayments(req: FastifyRequest, res: FastifyReply) {
     await createPaymentService.execute({ chargesId, method, status });
     return res.status(201).send();
   } catch (e) {
-    if (e instanceof ResourceNotFoundError) {
+    if (e instanceof ResourceNotFoundError || e instanceof AlreadyExistsPaymentError) {
       return res.status(403).send({ errors: e.message });
     }
 
