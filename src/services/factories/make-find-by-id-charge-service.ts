@@ -1,8 +1,8 @@
-import { InMemoryChargesRepository } from '@/repositories/in-memory/in-memory-charges-repository';
 import { FindByIdChargeService } from '../charges/find-by-id-charge-service';
+import { PrismaChargeRepository } from '@/repositories/prisma/prisma-charge-repository';
 
 export function makeFindByIdChargeService() {
-  const chargeRepository = new InMemoryChargesRepository();
+  const chargeRepository = new PrismaChargeRepository();
   const findByIdChargeService = new FindByIdChargeService(chargeRepository);
   return findByIdChargeService;
 }
