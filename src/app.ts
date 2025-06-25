@@ -1,11 +1,15 @@
 import { fastify } from 'fastify';
 import { ZodError } from 'zod';
-import { chargeRoutes } from './http/routes';
+import { chargeRoutes, paymentsRoutes } from './http/routes';
 
 export const app = fastify();
 
 app.register(chargeRoutes, {
   prefix: 'charges',
+});
+
+app.register(paymentsRoutes, {
+  prefix: 'payments',
 });
 
 app.setErrorHandler((err, req, res) => {
