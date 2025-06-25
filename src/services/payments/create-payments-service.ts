@@ -34,6 +34,12 @@ export class CreatePaymentsService {
       throw new AlreadyExistsPaymentError();
     }
 
+    if (status === 'success') {
+      this.chargeRepository.updateStatusByPayment(chargesId, 'paid');
+    } else {
+      this.chargeRepository.updateStatusByPayment(chargesId, 'failed');
+    }
+
     const payment = await this.paymentRepository.create({
       method,
       status,

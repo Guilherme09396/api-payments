@@ -48,4 +48,17 @@ describe('serviço de criação de pagamentos', () => {
     await sut.execute({ status: 'success', chargesId: charge.id, method: 'pix' });
     await expect(sut.execute({ status: 'success', chargesId: charge.id, method: 'pix' })).rejects.toBeInstanceOf(AlreadyExistsPaymentError);
   });
+
+  test('é esperado modificar status da cobrança para o status solicitado', async () => {
+    const charge = await repoCharges.create({
+      client: 'Guilherme',
+      amount: 1000,
+      status: 'pending',
+      description: 'teste',
+    });
+
+    await sut.execute({ status: 'success', chargesId: charge.id, method: 'pix' });
+    const chargeResult = await repoCharges.findById(charge.id);
+    expect(chargeResult?.status).toEqual('paid');
+  });
 });
