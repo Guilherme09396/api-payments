@@ -13,3 +13,27 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Charges {
+  id          String     @id @default(uuid())
+  client      String
+  amount      Float
+  description String
+  status      String
+  created_at  DateTime   @default(now())
+  Payments    Payments[]
+
+  @@map("charges")
+}
+
+model Payments {
+  id String @id @default(uuid())
+
+  charge     Charges  @relation(fields: [charges_id], references: [id])
+  charges_id String
+  method     String
+  status     String
+  created_at DateTime @default(now())
+
+  @@map("payments")
+}
