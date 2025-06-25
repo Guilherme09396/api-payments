@@ -3,6 +3,7 @@ import { createCharge } from './controllers/charges/create-charges';
 import { findByIdCharge } from './controllers/charges/find-by-id-charge';
 import { findCharges } from './controllers/charges/find-charges';
 import { createPayments } from './controllers/payments/create-payments';
+import { findPayments } from './controllers/payments/find-payments';
 
 export function chargeRoutes(app: FastifyInstance) {
   app.post('/', createCharge);
@@ -12,4 +13,5 @@ export function chargeRoutes(app: FastifyInstance) {
 
 export function paymentsRoutes(app: FastifyInstance) {
   app.post('/', createPayments);
+  app.get('/', findPayments);
 }

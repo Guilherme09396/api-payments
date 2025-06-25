@@ -9,7 +9,6 @@ interface FindPaymentResponse {
 export class FindPaymentsService {
   constructor(
     private paymentRepository: PaymentRepository,
-    private chargeRepository: ChargeRepository,
   ) {}
 
   async execute():
