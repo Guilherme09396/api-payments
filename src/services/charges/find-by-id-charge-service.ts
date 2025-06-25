@@ -2,11 +2,11 @@ import { Charges } from 'generated/prisma';
 import { ChargeRepository } from '@/repositories/Charge-repository';
 import { ResourceNotFoundError } from '../errors/resource-not-found-error';
 
-interface CreateChargeRequest {
+interface FindByIdChargeRequest {
     id: string
 }
 
-interface CreateChargeReponse {
+interface FindByIdChargeReponse {
   charge: Charges
 }
 
@@ -15,7 +15,7 @@ export class FindByIdChargeService {
 
   async execute({
     id,
-  }: CreateChargeRequest): Promise<CreateChargeReponse> {
+  }: FindByIdChargeRequest): Promise<FindByIdChargeReponse> {
     const charge = await this.chargeRepository.findById(id);
 
     if (!charge) {

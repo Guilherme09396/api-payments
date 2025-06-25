@@ -5,6 +5,10 @@ import { ChargeRepository } from '../Charge-repository';
 export class InMemoryChargesRepository implements ChargeRepository {
   private data: Charges[] = [];
 
+  async findAll(): Promise<Charges[]> {
+    return this.data;
+  }
+
   async findById(id: string): Promise<Charges | null> {
     const charge = this.data.find((item) => item.id === id);
 

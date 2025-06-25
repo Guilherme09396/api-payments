@@ -7,7 +7,7 @@ import { InMemoryChargesRepository } from '@/repositories/in-memory/in-memory-ch
 import { FindByIdChargeService } from './find-by-id-charge-service';
 import { ResourceNotFoundError } from '../errors/resource-not-found-error';
 
-describe('serviço de cobranças', () => {
+describe('serviço de buscar cobrança por id', () => {
   let chargeRepository: ChargeRepository;
   let sut: FindByIdChargeService;
 
