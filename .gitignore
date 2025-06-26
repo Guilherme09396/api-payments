@@ -5,3 +5,7 @@ node_modules
 /generated/prisma
 coverage
 dist
+src/services/charges/test
+src/services/payments/test
+src/services/refunds/test
+src/services/webhook/test
