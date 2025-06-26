@@ -5,7 +5,7 @@ import { LogWebhookRepository } from '../Log-webhook-repository';
 export class InMemoryLogWebhookRepository implements LogWebhookRepository {
   private data: logsWebhook[] = [];
 
-  async findByChargeId(chargeId: String): Promise<logsWebhook | null> {
+  async findByChargeId(chargeId: string): Promise<logsWebhook | null> {
     const log = this.data.find((item) => item.charge_id === chargeId);
     if (!log) {
       return null;
