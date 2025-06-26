@@ -3,12 +3,10 @@ import { ChargeRepository } from '../Charge-repository';
 import { prisma } from '@/lib/prisma/index';
 
 export class PrismaChargeRepository implements ChargeRepository {
-  async updateStatusByPayment(chargeId: string, status: string): Promise<Charges> {
+  async updateOneCharge(data: Prisma.ChargesUpdateInput, chargeId: string): Promise<Charges> {
     const charge = await prisma.charges.update({
       where: { id: chargeId },
-      data: {
-        status,
-      },
+      data,
     });
 
     return charge;

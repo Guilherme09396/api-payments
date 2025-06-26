@@ -35,9 +35,9 @@ export class CreatePaymentsService {
     }
 
     if (status === 'success') {
-      this.chargeRepository.updateStatusByPayment(chargesId, 'paid');
+      this.chargeRepository.updateOneCharge({ status: 'paid' }, chargesId);
     } else {
-      this.chargeRepository.updateStatusByPayment(chargesId, 'failed');
+      this.chargeRepository.updateOneCharge({ status: 'failed' }, chargesId);
     }
 
     const payment = await this.paymentRepository.create({
