@@ -15,7 +15,7 @@ export async function simulateWebhook(req: FastifyRequest, res: FastifyReply) {
 
     const simulateWebhookService = makeSimulateWebhookService();
     const { charge } = await simulateWebhookService.execute({ event, chargeId });
-    return { charge };
+    return res.status(201).send({ charge });
   } catch (e) {
     if (e instanceof ResourceNotFoundError) {
       return res.status(403).send({ errors: e.message });

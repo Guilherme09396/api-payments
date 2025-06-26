@@ -7,7 +7,7 @@ export async function findAllLogsWebhook(req: FastifyRequest, res: FastifyReply)
   try {
     const findAllLogsWebhookService = makeFindAllsLogsWebhookService();
     const { logs } = await findAllLogsWebhookService.execute();
-    return { logs };
+    return res.status(200).send({ logs });
   } catch (e) {
     if (e instanceof ResourceNotFoundError) {
       return res.status(403).send({ errors: e.message });
