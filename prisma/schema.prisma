@@ -15,13 +15,14 @@ datasource db {
 }
 
 model Charges {
-  id          String     @id @default(uuid())
+  id          String        @id @default(uuid())
   client      String
   amount      Float
   description String
   status      String
-  created_at  DateTime   @default(now())
+  created_at  DateTime      @default(now())
   Payments    Payments[]
+  logsWebhook logsWebhook[]
 
   @@map("charges")
 }
@@ -36,4 +37,15 @@ model Payments {
   created_at DateTime @default(now())
 
   @@map("payments")
+}
+
+model logsWebhook {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  event      String
+
+  charge    Charges @relation(fields: [charge_id], references: [id])
+  charge_id String
+
+  @@map("logs_webhook")
 }
