@@ -3,6 +3,7 @@ import { SimulateWebhookService } from '../webhook/simulate-webhook-service';
 
 export function makeSimulateWebhookService() {
   const chargeRepository = new PrismaChargeRepository();
+  const logWebhookRepository;
   const simulateWebhookService = new SimulateWebhookService(chargeRepository);
   return simulateWebhookService;
 }

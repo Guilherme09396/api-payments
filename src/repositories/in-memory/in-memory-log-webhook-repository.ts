@@ -5,6 +5,15 @@ import { LogWebhookRepository } from '../Log-webhook-repository';
 export class InMemoryLogWebhookRepository implements LogWebhookRepository {
   private data: logsWebhook[] = [];
 
+  async findByChargeId(chargeId: String): Promise<logsWebhook | null> {
+    const log = this.data.find((item) => item.charge_id === chargeId);
+    if (!log) {
+      return null;
+    }
+
+    return log;
+  }
+
   async create(data: Prisma.logsWebhookUncheckedCreateInput): Promise<logsWebhook> {
     this.data.push({
       id: randomUUID(),

@@ -1,6 +1,7 @@
 import { Charges } from 'generated/prisma';
 import { ChargeRepository } from '@/repositories/Charge-repository';
 import { ResourceNotFoundError } from '../errors/resource-not-found-error';
+import { LogWebhookRepository } from '@/repositories/Log-webhook-repository';
 
 interface SimulateWebhookRequest {
     event: string
@@ -14,6 +15,7 @@ interface SimulateWebhookResponse {
 export class SimulateWebhookService {
   constructor(
     private chargeRepository: ChargeRepository,
+    private logWebhookRepository: LogWebhookRepository,
   ) {}
 
   async execute({ event, chargeId }: SimulateWebhookRequest): Promise<SimulateWebhookResponse> {
@@ -33,6 +35,10 @@ export class SimulateWebhookService {
     }
 
     const chargeUpdated = await this.chargeRepository.updateOneCharge({ status }, chargeId);
+    await this.logWebhookRepository.create({
+      charge_id: chargeId,
+      event,
+    });
     return { charge: chargeUpdated };
   }
 }
