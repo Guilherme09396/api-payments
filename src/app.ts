@@ -9,7 +9,7 @@ import { env } from './env';
 export const app = fastify();
 
 app.register(fastifyCors, {
-  origin: 'https://front-end-api-payments-qxi85v5ea-guilherme09396s-projects.vercel.app/',
+  origin: '*',
 });
 
 app.register(chargeRoutes, {
