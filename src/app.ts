@@ -1,7 +1,9 @@
 import { fastify } from 'fastify';
 import { ZodError } from 'zod';
 import fastifyCors from '@fastify/cors';
-import { chargeRoutes, paymentsRoutes, refundsRoutes } from './http/routes';
+import {
+  chargeRoutes, paymentsRoutes, refundsRoutes, simulateWebhookRoutes,
+} from './http/routes';
 import { env } from './env';
 
 export const app = fastify();
@@ -18,6 +20,10 @@ app.register(paymentsRoutes, {
 
 app.register(refundsRoutes, {
   prefix: 'api/refunds',
+});
+
+app.register(simulateWebhookRoutes, {
+  prefix: 'api/webhook',
 });
 
 app.setErrorHandler((err, req, res) => {

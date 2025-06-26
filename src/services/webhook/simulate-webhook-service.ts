@@ -1,7 +1,5 @@
 import { Charges } from 'generated/prisma';
 import { ChargeRepository } from '@/repositories/Charge-repository';
-import { PaymentRepository } from '@/repositories/Payment-repository';
-import { NotFoundPaymentError } from '../errors/not-found-payment-error';
 import { ResourceNotFoundError } from '../errors/resource-not-found-error';
 
 interface SimulateWebhookRequest {
@@ -16,7 +14,6 @@ interface SimulateWebhookResponse {
 export class SimulateWebhookService {
   constructor(
     private chargeRepository: ChargeRepository,
-    private paymentRepository: PaymentRepository,
   ) {}
 
   async execute({ event, chargeId }: SimulateWebhookRequest): Promise<SimulateWebhookResponse> {

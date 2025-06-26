@@ -5,6 +5,7 @@ import { findCharges } from './controllers/charges/find-charges';
 import { createPayments } from './controllers/payments/create-payments';
 import { findPayments } from './controllers/payments/find-payments';
 import { createRefunds } from './controllers/refunds/create-refunds';
+import { simulateWebhook } from './controllers/webhooks/simulate-webhook';
 
 export function chargeRoutes(app: FastifyInstance) {
   app.post('/', createCharge);
@@ -19,4 +20,8 @@ export function paymentsRoutes(app: FastifyInstance) {
 
 export function refundsRoutes(app: FastifyInstance) {
   app.post('/:id', createRefunds);
+}
+
+export function simulateWebhookRoutes(app: FastifyInstance) {
+  app.post('/payment', simulateWebhook);
 }
