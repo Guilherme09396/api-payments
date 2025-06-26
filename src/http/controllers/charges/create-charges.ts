@@ -15,9 +15,9 @@ export async function createCharge(req: FastifyRequest, res: FastifyReply) {
   } = chargeSchema.parse(req.body);
 
   const createChargeService = makeCreateChargeService();
-  await createChargeService.execute({
+  const { charge } = await createChargeService.execute({
     client, amount, description, status,
   });
 
-  return res.status(201).send();
+  return res.status(201).send({ charge });
 }

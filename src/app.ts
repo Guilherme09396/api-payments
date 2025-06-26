@@ -1,16 +1,23 @@
 import { fastify } from 'fastify';
 import { ZodError } from 'zod';
-import { chargeRoutes, paymentsRoutes } from './http/routes';
+import fastifyCors from '@fastify/cors';
+import { chargeRoutes, paymentsRoutes, refundsRoutes } from './http/routes';
 import { env } from './env';
 
 export const app = fastify();
 
+app.register(fastifyCors);
+
 app.register(chargeRoutes, {
-  prefix: 'charges',
+  prefix: 'api/charges',
 });
 
 app.register(paymentsRoutes, {
-  prefix: 'payments',
+  prefix: 'api/payments',
+});
+
+app.register(refundsRoutes, {
+  prefix: 'api/refunds',
 });
 
 app.setErrorHandler((err, req, res) => {

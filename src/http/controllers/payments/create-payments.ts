@@ -15,8 +15,8 @@ export async function createPayments(req: FastifyRequest, res: FastifyReply) {
     const { chargesId, method, status } = paymentSchmea.parse(req.body);
 
     const createPaymentService = makeCreatePaymentsService();
-    await createPaymentService.execute({ chargesId, method, status });
-    return res.status(201).send();
+    const { payment } = await createPaymentService.execute({ chargesId, method, status });
+    return res.status(201).send({ payment });
   } catch (e) {
     if (e instanceof ResourceNotFoundError || e instanceof AlreadyExistsPaymentError) {
       return res.status(403).send({ errors: e.message });

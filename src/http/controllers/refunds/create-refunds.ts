@@ -14,7 +14,7 @@ export async function createRefunds(req: FastifyRequest, res: FastifyReply) {
 
     const createRefundsService = makeCreateRefundsService();
     const { charge } = await createRefundsService.execute({ chargeId: id });
-    return res.status(201).send();
+    return res.status(201).send({ charge });
   } catch (e) {
     if (e instanceof ResourceNotFoundError || e instanceof NotFoundPaymentError) {
       return res.status(403).send({ errors: e.message });
