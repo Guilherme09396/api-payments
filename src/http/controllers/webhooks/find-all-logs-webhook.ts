@@ -10,7 +10,7 @@ export async function findAllLogsWebhook(req: FastifyRequest, res: FastifyReply)
     return res.status(200).send({ logs });
   } catch (e) {
     if (e instanceof ResourceNotFoundError) {
-      return res.status(403).send({ errors: e.message });
+      return res.status(404).send({ errors: e.message });
     }
 
     throw e;

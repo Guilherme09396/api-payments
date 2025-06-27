@@ -17,7 +17,7 @@ export async function createRefunds(req: FastifyRequest, res: FastifyReply) {
     return res.status(201).send({ charge });
   } catch (e) {
     if (e instanceof ResourceNotFoundError || e instanceof NotFoundPaymentError) {
-      return res.status(403).send({ errors: e.message });
+      return res.status(404).send({ errors: e.message });
     }
 
     throw e;

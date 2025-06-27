@@ -37,5 +37,5 @@ app.setErrorHandler((err, req, res) => {
     console.error(err);
   }
 
-  return res.status(500).send();
+  return res.status(500).send({ errors: err.message });
 });

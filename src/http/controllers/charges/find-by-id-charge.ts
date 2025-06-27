@@ -17,7 +17,7 @@ export async function findByIdCharge(req: FastifyRequest, res: FastifyReply) {
     return res.status(200).send({ charge });
   } catch (e) {
     if (e instanceof ResourceNotFoundError) {
-      return res.status(404).send(e.message);
+      return res.status(404).send({ errors: e.message });
     }
 
     throw e;
