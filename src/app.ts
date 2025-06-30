@@ -1,8 +1,10 @@
 import { fastify } from 'fastify';
 import { ZodError } from 'zod';
 import fastifyCors from '@fastify/cors';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
 import {
-  chargeRoutes, paymentsRoutes, refundsRoutes, simulateWebhookRoutes,
+  chargeRoutes, docs, paymentsRoutes, refundsRoutes, simulateWebhookRoutes,
 } from './http/routes';
 import { env } from './env';
 
@@ -10,6 +12,10 @@ export const app = fastify();
 
 app.register(fastifyCors, {
   origin: '*',
+});
+
+app.register(fastifyStatic, {
+  root: path.join(__dirname, '..', 'static'), // Diretório onde os arquivos estáticos estão
 });
 
 app.register(chargeRoutes, {
@@ -26,6 +32,10 @@ app.register(refundsRoutes, {
 
 app.register(simulateWebhookRoutes, {
   prefix: 'api/webhook',
+});
+
+app.register(docs, {
+  prefix: 'api/docs',
 });
 
 app.setErrorHandler((err, req, res) => {

@@ -1,0 +1,424 @@
+openapi: 3.0.3
+info:
+  title: API de Pagamentos
+  description: API para criação, consulta e atualização de pagamentos.
+  version: 1.0.0
+
+servers:
+- url: https://api-payments-x6oe.onrender.com/api/payments
+  description: Servidor render
+- url: http://localhost:3333/api
+  description: Servidor local
+
+paths:
+  /charges:
+    post:
+      summary: Cria uma nova cobrança
+      tags: [ Cobranças ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createCharge'
+      responses:
+        '201':
+          description: Cobrança criada.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  charge:
+                    $ref: '#/components/schemas/charge'
+        '400':
+          description: Erro na validação do schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidFormatError'
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internalError'
+  /charges/{id}:
+    get:
+      summary: Busca uma cobrança por id
+      tags: [ Cobranças ]
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Cobrança retornada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  charge:
+                    $ref: '#/components/schemas/charge'
+        '404':
+          description: Cobrança não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/resourceNotFoundError'
+        '400':
+          description: Erro na validação do schema
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invalidFormatError'
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internalError'
+
+  /charges/:
+    get:
+      summary: Retorna todas as cobranças
+      tags: [ Cobranças ]
+      responses:
+        '200':
+          description: Cobranças retornadas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  charges:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/charge'
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/internalError'
+
+  /payments:
+    post:
+      summary: Cria um novo pagamento
+      tags: [ Pagamentos ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createPayment'
+      responses:
+        '201':
+          description: Pagamento criado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payments:
+                    $ref: "#/components/schemas/payment"
+
+        '404':
+          description: Cobrança não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resourceNotFoundError"
+        '403':
+          description: Já existe pagamento
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/alreadyExistPayment"
+        '400':
+          description: Erro na validação do schema
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/invalidFormatError"
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalError"
+
+  /payments/:
+    get:
+      summary: Lista todos os pagamentos
+      tags: [ Pagamentos ]
+      responses:
+        '200':
+          description: Lista todos os pagamentos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/payment'
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalError"
+
+  /refunds/{chargeId}:
+    post:
+      summary: Reembolsa pagamento
+      tags: [ Reembolso ]
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Retorna cobrança com o **status refunded**
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  charge:
+                    $ref: '#/components/schemas/charge'
+        '404':
+          description: Caso o não haja pagamento ou a cobrança não exista
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resourceNotFoundError"
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalError"
+
+  /webhook/payment:
+    post:
+      summary: Recebe notificações de eventos de pagamento
+      tags: [ Webhook ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createWebhook"
+      responses:
+        '201':
+          description: Webhook recebido com sucesso, modificando o status da cobrança de acordo com o evento informado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  charge:
+                    $ref: "#/components/schemas/charge"
+        '404':
+          description: Caso a cobrança não exista ou o evento informado seja inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/resourceNotFoundError"
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalError"
+  /webhook/logs:
+    get:
+      summary: Recebe notificações de eventos de pagamento
+      tags: [ Webhook ]
+      responses:
+        '200':
+          description: Mostra os logs dos eventos criado pelo webhook
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  logs:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/logsWebhook"
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/internalError"
+
+components:
+  schemas:
+    createCharge:
+      type: object
+      required: [ client, amount, description ]
+      properties:
+        client:
+          type: string
+          example: "string"
+        amount:
+          type: number
+          example: 100.00
+        description:
+          type: string
+          example: "string"
+        status:
+          type: string
+          enum:
+          - "pending"
+          - "failed"
+          - "paid"
+          - "refunded"
+          default: "pending"
+
+    charge:
+      type: object
+      required: [ id, client, amount, description, created_at ]
+      properties:
+        id:
+          type: string
+          format: uuid
+        client:
+          type: string
+          example: "string"
+        amount:
+          type: number
+          example: 100.00
+        description:
+          type: string
+          example: "string"
+        status:
+          type: string
+          enum:
+          - "pending"
+          - "failed"
+          - "paid"
+          - "refunded"
+          example: "pending"
+        created_at:
+          type: string
+          format: date-time
+
+    createPayment:
+      type: object
+      required: [ method, status, chargesId ]
+      properties:
+        method:
+          type: string
+          enum:
+          - credit_card
+          - pix
+          example: "pix"
+        status:
+          type: string
+          enum:
+          - success
+          - failed
+          example: "success"
+        chargesId:
+          type: string
+          format: uuid
+
+    payment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        charges_id:
+          type: string
+          format: uuid
+        method:
+          type: string
+          enum:
+          - pix
+          - credit_card
+        status:
+          type: string
+          enum:
+          - failed
+          - success
+        created_at:
+          type: string
+          format: date-time
+
+    createWebhook:
+      type: object
+      properties:
+        event:
+          type: string
+          enum:
+          - payment_success
+          - payment_failed
+        chargeId:
+          type: string
+          format: uuid
+
+    logsWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        event:
+          type: string
+          enum:
+          - payment_success
+          - payment_failed
+        charge_id:
+          type: string
+          format: uuid
+    internalError:
+      type: object
+      properties:
+        errors:
+          type: string
+          example: "Erro interno"
+    resourceNotFoundError:
+      type: object
+      properties:
+        errors:
+          type: string
+          example: "Resource Not Found"
+    alreadyExistPayment:
+      type: object
+      properties:
+        errors:
+          type: string
+          example: "Already exist payment"
+    invalidFormatError:
+      type: object
+      properties:
+        errors:
+          type: string
+          example: "Invalid format"
+        issues:
+          type: object
+          properties:
+            _errors:
+              type: array
+              example: []
+            chaveErro:
+              type: object
+              properties:
+                _errors:
+                  type: array
+                  example: [ "Expected number, received string" ]

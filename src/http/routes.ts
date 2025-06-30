@@ -27,3 +27,9 @@ export function simulateWebhookRoutes(app: FastifyInstance) {
   app.post('/payment', simulateWebhook);
   app.get('/logs', findAllLogsWebhook);
 }
+
+export function docs(app: FastifyInstance) {
+  app.get('/', (req, res) => {
+    res.sendFile('doc/index.html');
+  });
+}
