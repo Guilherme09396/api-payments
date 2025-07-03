@@ -97,7 +97,7 @@ npm start
 
 
 
-👨‍💻 Autor
+## 👨‍💻 Autor
 
 Guilherme Gomes
 
